@@ -40,8 +40,8 @@ export default function Dashboard() {
             <Card className="border-border/50 shadow-sm bg-card hover:bg-card/80 transition-colors">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Day Streak</CardTitle>
-                <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-md">
-                  <Flame className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                <div className="p-2 bg-orange-500/15 rounded-md">
+                  <Flame className="h-4 w-4 text-orange-400" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -53,8 +53,8 @@ export default function Dashboard() {
             <Card className="border-border/50 shadow-sm bg-card hover:bg-card/80 transition-colors">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Hours Learned</CardTitle>
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-md">
-                  <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <div className="p-2 bg-primary/15 rounded-md">
+                  <Clock className="h-4 w-4 text-primary" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -66,8 +66,8 @@ export default function Dashboard() {
             <Card className="border-border/50 shadow-sm bg-card hover:bg-card/80 transition-colors">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Average Score</CardTitle>
-                <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-md">
-                  <Target className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <div className="p-2 bg-green-500/15 rounded-md">
+                  <Target className="h-4 w-4 text-green-400" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -79,8 +79,8 @@ export default function Dashboard() {
             <Card className="border-border/50 shadow-sm bg-card hover:bg-card/80 transition-colors">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Quizzes Taken</CardTitle>
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-md">
-                  <Trophy className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                <div className="p-2 bg-accent/15 rounded-md">
+                  <Trophy className="h-4 w-4 text-accent" />
                 </div>
               </CardHeader>
               <CardContent>

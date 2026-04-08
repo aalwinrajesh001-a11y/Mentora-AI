@@ -41,9 +41,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <aside className="w-64 border-r border-border bg-sidebar flex-shrink-0 flex flex-col hidden md:flex">
         <div className="p-6">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary">
-            <GraduationCap className="h-6 w-6" />
-            <span>Mentora</span>
+          <Link href="/" className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+              <GraduationCap className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-base font-bold tracking-widest text-foreground uppercase">MENTORA</span>
+              <span className="text-[10px] text-muted-foreground tracking-wider">Mentorship | Education | Growth</span>
+            </div>
           </Link>
         </div>
         <nav className="flex-1 px-4 space-y-2">

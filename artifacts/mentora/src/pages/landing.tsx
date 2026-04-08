@@ -6,9 +6,14 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="py-6 px-8 border-b border-border flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xl font-bold text-primary">
-          <GraduationCap className="h-6 w-6" />
-          <span>Mentora AI</span>
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+            <GraduationCap className="h-5 w-5 text-white" />
+          </div>
+          <div className="flex flex-col leading-none">
+            <span className="text-sm font-bold tracking-widest text-foreground uppercase">MENTORA</span>
+            <span className="text-[10px] text-muted-foreground tracking-wider">Mentorship | Education | Growth</span>
+          </div>
         </div>
         <nav className="flex items-center gap-4">
           <Link href="/chat">

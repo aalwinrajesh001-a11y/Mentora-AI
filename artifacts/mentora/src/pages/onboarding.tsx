@@ -64,9 +64,14 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      <div className="mb-8 flex items-center gap-2 text-primary font-bold text-2xl">
-        <GraduationCap className="h-8 w-8" />
-        <span>Mentora AI</span>
+      <div className="mb-8 flex items-center gap-3">
+        <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center">
+          <GraduationCap className="h-6 w-6 text-white" />
+        </div>
+        <div className="flex flex-col leading-none">
+          <span className="text-lg font-bold tracking-widest text-foreground uppercase">MENTORA</span>
+          <span className="text-xs text-muted-foreground tracking-wider">Mentorship | Education | Growth</span>
+        </div>
       </div>
 
       <Card className="w-full max-w-md shadow-lg border-border">
