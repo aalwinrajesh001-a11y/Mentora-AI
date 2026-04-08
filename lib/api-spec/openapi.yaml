@@ -3,13 +3,21 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Mentora AI API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: openai
+    description: OpenAI AI chat, image, and audio operations
+  - name: profile
+    description: Student profile management
+  - name: quiz
+    description: Quiz management
+  - name: progress
+    description: Progress tracking and analytics
 paths:
   /healthz:
     get:
@@ -24,6 +32,241 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /openai/conversations:
+    get:
+      operationId: listOpenaiConversations
+      tags: [openai]
+      summary: List all conversations
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiConversation"
+    post:
+      operationId: createOpenaiConversation
+      tags: [openai]
+      summary: Create a new conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOpenaiConversationBody"
+      responses:
+        "201":
+          description: Created conversation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversation"
+  /openai/conversations/{id}:
+    get:
+      operationId: getOpenaiConversation
+      tags: [openai]
+      summary: Get conversation with messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Conversation with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversationWithMessages"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+    delete:
+      operationId: deleteOpenaiConversation
+      tags: [openai]
+      summary: Delete a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+  /openai/conversations/{id}/messages:
+    get:
+      operationId: listOpenaiMessages
+      tags: [openai]
+      summary: List messages in a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiMessage"
+    post:
+      operationId: sendOpenaiMessage
+      tags: [openai]
+      summary: Send a text message and receive a streaming text response
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendOpenaiMessageBody"
+      responses:
+        "200":
+          description: SSE stream of assistant text chunks
+          content:
+            text/event-stream: {}
+  /openai/generate-quiz:
+    post:
+      operationId: generateQuiz
+      tags: [openai]
+      summary: Generate a quiz for a given topic
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateQuizBody"
+      responses:
+        "200":
+          description: Generated quiz
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneratedQuiz"
+
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [profile]
+      summary: Get student profile
+      responses:
+        "200":
+          description: Student profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentProfile"
+        "404":
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+    post:
+      operationId: createProfile
+      tags: [profile]
+      summary: Create student profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProfileBody"
+      responses:
+        "201":
+          description: Created profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentProfile"
+    put:
+      operationId: updateProfile
+      tags: [profile]
+      summary: Update student profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProfileBody"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentProfile"
+
+  /progress:
+    get:
+      operationId: getProgress
+      tags: [progress]
+      summary: Get learning progress summary
+      responses:
+        "200":
+          description: Progress summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgressSummary"
+
+  /progress/quiz-result:
+    post:
+      operationId: saveQuizResult
+      tags: [progress]
+      summary: Save a quiz result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveQuizResultBody"
+      responses:
+        "201":
+          description: Saved quiz result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResult"
+
+  /progress/quiz-results:
+    get:
+      operationId: listQuizResults
+      tags: [progress]
+      summary: List all quiz results
+      responses:
+        "200":
+          description: List of quiz results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizResult"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +277,240 @@ components:
       required:
         - status
 
+    OpenaiConversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - createdAt
+    OpenaiMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        conversationId:
+          type: integer
+        role:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - conversationId
+        - role
+        - content
+        - createdAt
+    CreateOpenaiConversationBody:
+      type: object
+      properties:
+        title:
+          type: string
+      required:
+        - title
+    SendOpenaiMessageBody:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+    OpenaiConversationWithMessages:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenaiMessage"
+      required:
+        - id
+        - title
+        - createdAt
+        - messages
+    OpenaiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    GenerateQuizBody:
+      type: object
+      properties:
+        topic:
+          type: string
+        subject:
+          type: string
+        difficulty:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        count:
+          type: integer
+      required:
+        - topic
+        - subject
+        - difficulty
+    GeneratedQuiz:
+      type: object
+      properties:
+        topic:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuizQuestion"
+      required:
+        - topic
+        - questions
+    QuizQuestion:
+      type: object
+      properties:
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correctIndex:
+          type: integer
+        explanation:
+          type: string
+      required:
+        - question
+        - options
+        - correctIndex
+        - explanation
+
+    StudentProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        subjects:
+          type: array
+          items:
+            type: string
+        difficulty:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        learningStyle:
+          type: string
+          enum: [visual, detailed, example-based, concise]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - subjects
+        - difficulty
+        - learningStyle
+        - createdAt
+    CreateProfileBody:
+      type: object
+      properties:
+        name:
+          type: string
+        subjects:
+          type: array
+          items:
+            type: string
+        difficulty:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        learningStyle:
+          type: string
+          enum: [visual, detailed, example-based, concise]
+      required:
+        - name
+        - subjects
+        - difficulty
+        - learningStyle
+
+    ProgressSummary:
+      type: object
+      properties:
+        totalConversations:
+          type: integer
+        totalMessages:
+          type: integer
+        dayStreak:
+          type: integer
+        averageScore:
+          type: number
+        topicsStudied:
+          type: array
+          items:
+            type: string
+        quizzesTaken:
+          type: integer
+        hoursLearned:
+          type: number
+      required:
+        - totalConversations
+        - totalMessages
+        - dayStreak
+        - averageScore
+        - topicsStudied
+        - quizzesTaken
+        - hoursLearned
+
+    SaveQuizResultBody:
+      type: object
+      properties:
+        topic:
+          type: string
+        subject:
+          type: string
+        score:
+          type: integer
+        totalQuestions:
+          type: integer
+      required:
+        - topic
+        - subject
+        - score
+        - totalQuestions
+    QuizResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        topic:
+          type: string
+        subject:
+          type: string
+        score:
+          type: integer
+        totalQuestions:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - topic
+        - subject
+        - score
+        - totalQuestions
+        - createdAt
